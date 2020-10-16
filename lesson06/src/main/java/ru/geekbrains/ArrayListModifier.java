@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ArrayListModifier {
+    private ArrayListModifier() {}
     public static Integer[] arrayListModify(Integer[] originalArray){
         int i = 4;
 

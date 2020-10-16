@@ -16,11 +16,18 @@ public class ArrayListModifierTest {
     @Test
     public void shouldThrowRuntimeException(){
         Integer[] testArray = {1,2,3,0,5,6,0,5,6};
+/*
+        IDEA предложила вот этот код заменить на лямбду, не очень понял причину, но оно работает:
+
         Assertions.assertThrows(RuntimeException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
                 ArrayListModifier.arrayListModify(testArray);
             }
         });
+ */
+        Assertions.assertThrows(RuntimeException.class, () -> ArrayListModifier.arrayListModify(testArray));
     }
+
+
 }
