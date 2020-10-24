@@ -1,4 +1,3 @@
-import javax.crypto.Cipher;
 import java.sql.*;
 
 public class UserService implements Service<User> {
@@ -6,15 +5,15 @@ public class UserService implements Service<User> {
 
     @Override
     public ResultSet getUser(User user) {
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         Connection connection = null;
         try {
             connection = ConnectionFactory.getInstance();
-            PreparedStatement statement = connection.prepareStatement("SELECT FROM * users WHERE login = ?, pass = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?");
             statement.setString(1, user.getLogin());
-            statement.setString(2, user.getPass());
+     //       statement.setString(2, user.getPass());
             resultSet = statement.executeQuery();
-            return resultSet;
+          return resultSet;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -26,6 +25,7 @@ public class UserService implements Service<User> {
                 }
             }
         }
+        return null;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class UserService implements Service<User> {
 
        while(result.next()){
            i++;
-       };
+       }
 
        if(i >= 1){
            System.out.println("Login successful");
