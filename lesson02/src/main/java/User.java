@@ -2,8 +2,13 @@ public class User {
     String login;
     String pass;
 
-    public User (){}
     public User(String login, String pass) {
+        this.login = login;
+        this.pass = pass;
+    }
+
+    public User() {
+
     }
 
     public String getLogin() {

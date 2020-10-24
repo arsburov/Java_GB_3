@@ -4,16 +4,19 @@ public class UserService implements Service<User> {
 
 
     @Override
-    public ResultSet getUser(User user) {
-        ResultSet resultSet;
+    public User getUser(User user) {
         Connection connection = null;
         try {
             connection = ConnectionFactory.getInstance();
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ? AND pass = ?");
             statement.setString(1, user.getLogin());
-     //       statement.setString(2, user.getPass());
-            resultSet = statement.executeQuery();
-          return resultSet;
+            statement.setString(2, user.getPass());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return new User(
+                        resultSet.getString("login"),
+                        resultSet.getString("pass")
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -34,22 +37,46 @@ public class UserService implements Service<User> {
     }
 
     @Override
-    public void loginUser(String login, String pass) throws SQLException {
-       User user = new User();
-       user.setLogin(login);
-       user.setPass(pass);
-       ResultSet result = getUser(user);
+    public void loginUser(User object) {
+        User result = getUser(object);
+        int i = 0;
 
-       int i = 0;
+        if (result != null)
+            i++;
+//        try {
+//            while(result){
+//                i++;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
-       while(result.next()){
-           i++;
-       }
-
-       if(i >= 1){
-           System.out.println("Login successful");
-       }
+        if(i >= 1){
+            System.out.println("Login successful");
+        }
     }
+
+
+//    public void loginUser(String login, String pass) {
+//       User user = new User("Aaa", "1234");
+//       user.setLogin(login);
+//       user.setPass(pass);
+//       ResultSet result = getUser(user);
+//
+//       int i = 0;
+//
+//       try {
+//           while(result.next()){
+//               i++;
+//           }
+//       } catch (SQLException e) {
+//           e.printStackTrace();
+//       }
+//
+//       if(i >= 1){
+//           System.out.println("Login successful");
+//       }
+//    }
 
     @Override
     public boolean add(User object) {
@@ -61,7 +88,7 @@ public class UserService implements Service<User> {
             statement.setString(2, object.getPass());
             return statement.execute();
         } catch (SQLException e) {
-            throw new RuntimeException("Something went wrong during DB-query");
+            e.printStackTrace();
         } finally {
             if (connection != null) {
                 try {
@@ -71,5 +98,6 @@ public class UserService implements Service<User> {
                 }
             }
         }
+        return false;
     }
 }

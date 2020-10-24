@@ -2,8 +2,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface Service<T> {
-    ResultSet getUser(User user);
+    T getUser(T object);
     void rename(T object);
-    void loginUser(String login, String pass) throws SQLException;
+    void loginUser(T object) throws SQLException;
     boolean add (T object);
 }
