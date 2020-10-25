@@ -11,12 +11,13 @@ public class UserService implements Service<User> {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE login = ? AND pass = ?");
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getPass());
-            try (ResultSet resultSet = statement.executeQuery()) {
-                return new User(
-                        resultSet.getString("login"),
-                        resultSet.getString("pass")
-                );
+            ResultSet resultSet = statement.executeQuery();
+            User user1 = new User();
+            while (resultSet.next()){
+                user1.setLogin(resultSet.getString("login"));
+                user1.setPass(resultSet.getString("pass"));
             }
+            return user1;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
